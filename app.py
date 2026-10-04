@@ -1,69 +1,46 @@
 import random
 import streamlit as st
+from logic_utils import check_guess, get_range_for_difficulty, parse_guess, update_score
 
-# FIXME: Logic breaks here
-def get_range_for_difficulty(difficulty: str):
-    if difficulty == "Easy":
-        return 1, 20
-    if difficulty == "Normal":
-        return 1, 100
-    if difficulty == "Hard":
-        return 1, 50
-    return 1, 100
-
-
-def parse_guess(raw: str):
-    if raw is None:
-        return False, None, "Enter a guess."
-
-    if raw == "":
-        return False, None, "Enter a guess."
-
-    try:
-        if "." in raw:
-            value = int(float(raw))
-        else:
-            value = int(raw)
-    except Exception:
-        return False, None, "That is not a number."
-
-    return True, value, None
-
-# FIXME: Logic breaks here
-def check_guess(guess, secret):
-    if guess == secret:
-        return "Win", "🎉 Correct!"
-
-    try:
-        if guess > secret:
-            return "Too High", "📈 Go HIGHER!"
-        else:
-            return "Too Low", "📉 Go LOWER!"
-    except TypeError:
-        g = str(guess)
-        if g == secret:
-            return "Win", "🎉 Correct!"
-        if g > secret:
-            return "Too High", "📈 Go HIGHER!"
-        return "Too Low", "📉 Go LOWER!"
+#FIX: Refactored logic into logic_utils.py using agent mode
+# def get_range_for_difficulty(difficulty: str):
+#     if difficulty == "Easy":
+#         return 1, 20
+#     if difficulty == "Normal":
+#         return 1, 100
+#     if difficulty == "Hard":
+#         return 1, 50
+#     return 1, 100
 
 
-def update_score(current_score: int, outcome: str, attempt_number: int):
-    if outcome == "Win":
-        points = 100 - 10 * (attempt_number + 1)
-        if points < 10:
-            points = 10
-        return current_score + points
+#FIX: Refactored logic into logic_utils.py using agent mode
+# def parse_guess(raw: str):
+#     if raw is None:
+#         return False, None, "Enter a guess."
+#     ...
 
-    if outcome == "Too High":
-        if attempt_number % 2 == 0:
-            return current_score + 5
-        return current_score - 5
+#FIX: Refactored logic into logic_utils.py using agent mode
+# def check_guess(guess, secret):
+#     if guess == secret:
+#         return "Win", "🎉 Correct!"
 
-    if outcome == "Too Low":
-        return current_score - 5
+#     try:
+#         if guess > secret:
+#             return "Too High", "📉 Go LOWER!" 
+#         else:
+#             return "Too Low", "📈 Go HIGHER!"
+#     except TypeError:
+#         g = str(guess)
+#         if g == secret:
+#             return "Win", "🎉 Correct!"
+#         if g > secret:
+#             return "Too High","📉 Go LOWER!"
+#         return "Too Low", "📈 Go HIGHER!"
 
-    return current_score
+
+#FIX: Refactored logic into logic_utils.py using agent mode
+# def update_score(current_score: int, outcome: str, attempt_number: int):
+#     ...
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
@@ -94,7 +71,7 @@ if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
 if "attempts" not in st.session_state:
-    st.session_state.attempts = 1
+    st.session_state.attempts = 0 # changed for new game fix
 
 if "score" not in st.session_state:
     st.session_state.score = 0
@@ -108,16 +85,17 @@ if "history" not in st.session_state:
 st.subheader("Make a guess")
 
 st.info(
-    f"Guess a number between 1 and 100. "
+    f"Guess a number between {low} and {high}. " # fixed so the range shown is correct
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
 
-with st.expander("Developer Debug Info"):
-    st.write("Secret:", st.session_state.secret)
-    st.write("Attempts:", st.session_state.attempts)
-    st.write("Score:", st.session_state.score)
-    st.write("Difficulty:", difficulty)
-    st.write("History:", st.session_state.history)
+#  hide this
+# with st.expander("Developer Debug Info"):
+#     st.write("Secret:", st.session_state.secret)
+#     st.write("Attempts:", st.session_state.attempts)
+#     st.write("Score:", st.session_state.score)
+#     st.write("Difficulty:", difficulty)
+#     st.write("History:", st.session_state.history)
 
 raw_guess = st.text_input(
     "Enter your guess:",
@@ -132,10 +110,13 @@ with col2:
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
-# FIXME: Logic breaks here
+# fixed this
 if new_game:
-    st.session_state.attempts = 0
-    st.session_state.secret = random.randint(1, 100)
+    st.session_state.attempts = 0 # changed
+    st.session_state.secret = random.randint(low, high) # changed to show range
+    st.session_state.status = "playing" # key fix
+    st.session_state.score = 0
+    st.session_state.history = []
     st.success("New game started.")
     st.rerun()
 
@@ -157,12 +138,13 @@ if submit:
     else:
         st.session_state.history.append(guess_int)
 
-        if st.session_state.attempts % 2 == 0:
-            secret = str(st.session_state.secret)
-        else:
-            secret = st.session_state.secret
+        # this turned seceret into a string on even attempt
+        # if st.session_state.attempts % 2 == 0:
+        #     secret = str(st.session_state.secret)
+        # else:
+        #     secret = st.session_state.secret
 
-        outcome, message = check_guess(guess_int, secret)
+        outcome, message = check_guess(guess_int, st.session_state.secret) # this is the fix
 
         if show_hint:
             st.warning(message)
