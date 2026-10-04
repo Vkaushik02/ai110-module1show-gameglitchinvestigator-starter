@@ -25,28 +25,31 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+- The game's purpose is to be a guessing game that requires the user to guess a random number within a certain number of tries.
+- I found multiple bugs, such as the hints being flipped, the New Game button not working, and the ranges being incorrect for the different modes. Furthermore, I made some changes to the logic, such as changing the number of tries used from 1 to 0 and disabling the developer debug section because it was defeating the purpose of the game.
+- The fixes I applied included switching the hint statements, fixing the New Game button's status, setting the number of tries used to 0, resetting the score, and setting the correct ranges. The developer debug section was commented out, and the ranges were updated for each mode.  
 
 ## 📸 Demo Walkthrough
 
-Describe your fixed game in numbered steps so a reader can follow along without watching a video:
-
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Start the game. Run python -m streamlit run app.py. The sidebar shows the difficulty default Normal, the range (1 to 50) and the attempts allowed 8. The main panel shows Guess a number between 1 and 50 and attempts left: 8.
+2. Make a first guess. Type a number such as 25 and click Submit Guess. The game replies with a hint:
+- "📈 Go HIGHER!" means your guess was too low.
+- "📉 Go LOWER!" means your guess was too high. Attempts left drops by one, and the score changes.
+3. Keep guessing based on the hint, for example by moving halfway toward the secret each time.
+4. Try a bad entry. Type something like abc and submit. The game shows "That is not a number." The entry still counts as an attempt.
+5. Turn hints off. Untick Show hint, then submit another guess. The Higher/Lower message no longer appears, but the attempt and score still update. Tick it again to get the hints back.
+6. Change the difficulty. Pick a different level in the sidebar. The range and attempt limit update.
+7. Win. When you guess the secret, the game shows "🎉 Correct!", balloons, and "You won! The secret was N. Final score: x". Further guesses are ignored with "You already won. Start a new game to play again."
+8. Lose. If you use every attempt without finding it, the game shows "Out of attempts! The secret was N. Score: …" and locks.
+9. Play again. Click New Game 🔁. A new random secret is picked, and the score, attempts and history reset.
 
 **Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
 
 ## 🧪 Test Results
 
 ```
-# Paste your pytest output here, e.g.:
-# pytest tests/
-# ========================= X passed in 0.XXs =========================
+tests\test_game_logic.py .....................                                                                                                     [100%]
+=============================== 17 passed in 0.09s ===========================================================
 ```
 
 ## 🚀 Stretch Features

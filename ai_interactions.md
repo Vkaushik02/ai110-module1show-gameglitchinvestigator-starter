@@ -28,9 +28,10 @@
 
 | Edge Case | Prompt Used | AI-Suggested Test | Did It Pass? | Your Reasoning |
 |-----------|-------------|-------------------|--------------|----------------|
-| | | | | |
-| | | | | |
-| | | | | |
+|Empty input| based on the code in app.py and logic_utils.py can you generate at least three pytest cases targeting empty input. give the testcases to review before any changes are made| Test case 1 under edge test cases| Yes |This test case tests empty input and rejects them with the right message|
+| Empty and non-numeric input| based on the code in app.py and logic_utils.py can you generate at least three pytest cases targeting complex non-numeric input. give the testcases to review before any changes are made| Test case 2 under edge test cases| Yes |This test case tests all non numeric inputs and rejects them with the right message |
+|Negative and decimal input| based on the code in app.py and logic_utils.py can you generate at least three pytest cases targeting complex decimal and negative input. give the testcases to review before any changes are made| Test case 3 under edge test cases| Yes |This test case checks those inputs and parses it|
+
 
 ---
 
