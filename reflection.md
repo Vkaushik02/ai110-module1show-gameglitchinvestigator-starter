@@ -4,9 +4,14 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 
 ## 1. What was broken when you started?
 
-- What did the game look like the first time you ran it?
-- List at least two concrete bugs you noticed at the start  
-  (for example: "the hints were backwards").
+When I first ran the program, I noticed several bugs with the hints and the New Game button.
+
+- The Normal and Hard mode ranges were switched. This bug was in the app.py file.
+
+- The New Game button did not work when clicked. This bug was in the app.py file.
+
+- The Show Hint feature only showed one hint instead of the expected hints. This bug was in the app.py file.
+
 
 **Bug Reproduction Log**
 
@@ -14,9 +19,9 @@ Document at least 3 bugs you found. Add rows as needed.
 
 | Input | Expected Behavior | Actual Behavior | Console Output / Error |
 |-------|-------------------|-----------------|------------------------|
-| | | | |
-| | | | |
-| | | | |
+|Normal | Range 1-50        | 1-100           | none                   |    
+|New game button| New game  | Nothing happens | none                   |  
+|Show hint| Lower when value is higher| Showing higher| none|
 
 ---
 
